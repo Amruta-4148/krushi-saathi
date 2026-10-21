@@ -7,6 +7,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 const text = {
   mr: {
+    brandName: 'कृषी साथी',
     why: 'आमचं वैशिष्ट्य',
     features: 'फीचर्स',
     eyebrow: 'शेतकऱ्यांसाठी डिजिटल साथी',
@@ -37,6 +38,7 @@ const text = {
   },
 },
   hi: {
+    brandName: 'कृषि साथी',
     why: 'हमारी खासियत',
     features: 'फ़ीचर्स',
     eyebrow: 'किसानों के लिए डिजिटल साथी',
@@ -67,6 +69,7 @@ const text = {
   },
 },
   en: {
+    brandName: 'Krushi Saathi',
     why: 'Why Krushi Saathi',
     features: 'Features',
     eyebrow: 'A digital companion for farmers',
@@ -105,6 +108,34 @@ function App() {
   const location = useLocation()
   const [weather, setWeather] = useState('Weather loading…')
   const [locationName, setLocationName] = useState('Finding location…')
+  const sayHi = () => {
+  const greetings = {
+    en: ["Hi, welcome to Krushi Saathi!", "en-IN"],
+    hi: ["नमस्ते, कृषि साथी में आपका स्वागत है!", "hi-IN"],
+    mr: ["नमस्कार, कृषी साथीमध्ये तुमचं स्वागत आहे!", "mr-IN"],
+  };
+
+  const [message, voice] = greetings[language] || greetings.en;
+  const greeting = new SpeechSynthesisUtterance(message);
+  greeting.lang = voice;
+  window.speechSynthesis.speak(greeting);
+};
+useEffect(() => {
+  const timer = setTimeout(() => {
+    const greetings = {
+      en: ["Hi, welcome to Krushi Saathi!", "en-IN"],
+      hi: ["नमस्ते, कृषि साथी में आपका स्वागत है!", "hi-IN"],
+      mr: ["नमस्कार, कृषी साथीमध्ये तुमचं स्वागत आहे!", "mr-IN"],
+    };
+
+    const [message, voice] = greetings[language] || greetings.en;
+    const greeting = new SpeechSynthesisUtterance(message);
+    greeting.lang = voice;
+    window.speechSynthesis.speak(greeting);
+  }, 1000);
+
+  return () => clearTimeout(timer);
+}, [language]);
 
 useEffect(() => {
   if (!navigator.geolocation) {
@@ -235,6 +266,7 @@ onChange={(event) => setQuestion(event.target.value)}
             className="farmer-head"
             src={robotHead}
             alt="Friendly farmer robot"
+            onClick={sayHi}
           />
           <span className="blink-eye blink-eye-left" aria-hidden="true" />
           <span className="blink-eye blink-eye-right" aria-hidden="true" />
